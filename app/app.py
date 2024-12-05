@@ -10,6 +10,7 @@ class App(QtWidgets.QWidget):
         self.setup_ui()
         self.set_default_values()
         self.setup_connections()
+        self.setup_css()
     
     def setup_ui(self):
         self.layout = QtWidgets.QHBoxLayout(self) # type: ignore
@@ -63,6 +64,13 @@ class App(QtWidgets.QWidget):
         
         self.compute()
         
+    def setup_css(self):
+        self.setStyleSheet("""
+        background-color: rgb(30, 30, 30);
+        color: rgb(240, 240, 240);
+        border: none;
+        """)
+
 app = QtWidgets.QApplication([])
 win = App()
 win.show()
