@@ -9,6 +9,7 @@ class App(QtWidgets.QWidget):
         self.setWindowTitle("Convertisseur de devises")
         self.setup_ui()
         self.set_default_values()
+        self.setup_connections()
     
     def setup_ui(self):
         self.layout = QtWidgets.QHBoxLayout(self) # type: ignore
@@ -35,6 +36,28 @@ class App(QtWidgets.QWidget):
         self.spn_montantConverti.setRange(1, 1000000)
         self.spn_montantConverti.setValue(100)
 
+    def setup_connections(self):
+        self.cbb_devisesFrom.activated.connect(self.compute)
+        self.cbb_devisesTo.activated.connect(self.compute)
+        self.spn_montant.valueChanged.connect(self.compute)
+        self.btn_inverser.clicked.connect(self.inverser_devise)
+
+    def compute(self):
+        montant = self.spn_montant.value()
+        devise_from = self.cbb_devisesFrom.currentText()
+        devise_to = self.cbb_devisesTo.currentText()
+        resultat = self.c.convert(montant, devise_from, devise_to)
+        self.spn_montantConverti.setValue(resultat) # type: ignore
+    
+    def inverser_devise(self):
+        devise_from = self.cbb_devisesFrom.currentText()
+        devise_to = self.cbb_devisesTo.currentText()
+        
+        self.cbb_devisesFrom.setCurrentText(devise_to)
+        self.cbb_devisesTo.setCurrentText(devise_from)
+        
+        self.compute()
+        
 app = QtWidgets.QApplication([])
 win = App()
 win.show()
